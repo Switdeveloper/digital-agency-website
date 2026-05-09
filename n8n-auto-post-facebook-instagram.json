@@ -1,0 +1,138 @@
+{
+  "name": "Auto Post to Facebook & Instagram",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Generate daily post content\nconst topics = [\n  'productivity tips for busy professionals',\n  'behind the scenes of our brand',\n  'customer success stories',\n  'quick how-to or tutorial',\n  'industry news and trends',\n  'motivational monday post',\n  'fun friday facts about your niche',\n  'new product feature spotlight'\n];\n\nconst images = [\n  'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=1200',\n  'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200',\n  'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200',\n  'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200'\n];\n\nconst topic = topics[Math.floor(Math.random() * topics.length)];\nconst image = images[Math.floor(Math.random() * images.length)];\n\nconst post = {\n  caption: `✨ ${topic.charAt(0).toUpperCase() + topic.slice(1)}!\\n\\nWhat would you like to see more of? Drop a comment below 👇\\n\\n#Business #Automation #Growth`,\n  imageUrl: image,\n  topic: topic\n};\n\nreturn [{ json: post }];"
+      },
+      "id": "generate-content",
+      "name": "Generate Post Content",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [470, 300]
+    },
+    {
+      "parameters": {
+        "resource": "post",
+        "operation": "create",
+        "hostUrl": {
+          "__rl": true,
+          "mode": "list",
+          "value": "default"
+        },
+        "httpMethod": {
+          "__rl": true,
+          "mode": "list",
+          "value": "POST"
+        },
+        "node": "/me/photos",
+        "additionalFields": {
+          "caption": "={{ $json.caption }}"
+        },
+        "binaryData": false,
+        "urlHash": "={{ $json.imageUrl }}",
+        "options": {}
+      },
+      "id": "facebook-post",
+      "name": "Post to Facebook",
+      "type": "n8n-nodes-base.facebookGraphApi",
+      "typeVersion": 1,
+      "position": [690, 180],
+      "credentials": {
+        "facebookGraphApiApi": {
+          "id": "facebook-creds",
+          "name": "Facebook Graph API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "media",
+        "operation": "publish",
+        "hostUrl": {
+          "__rl": true,
+          "mode": "list",
+          "value": "instagram"
+        },
+        "httpMethod": {
+          "__rl": true,
+          "mode": "list",
+          "value": "POST"
+        },
+        "node": "/me/media",
+        "additionalFields": {
+          "caption": "={{ $json.caption }}",
+          "mediaType": "IMAGE",
+          "imageUrl": "={{ $json.imageUrl }}"
+        },
+        "options": {}
+      },
+      "id": "instagram-post",
+      "name": "Post to Instagram",
+      "type": "n8n-nodes-base.facebookGraphApi",
+      "typeVersion": 1,
+      "position": [690, 420],
+      "credentials": {
+        "facebookGraphApiApi": {
+          "id": "facebook-creds",
+          "name": "Facebook Graph API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "message": "=✅ Auto-post published successfully!\\n📌 Topic: {{ $json.topic }}\\n💬 Caption preview: {{ $json.caption.substring(0, 80) }}...\\n\\nCheck your Facebook page and Instagram account to verify."
+      },
+      "id": "slack-notify",
+      "name": "Notify Success (Slack/Telegram)",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [910, 300]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [{ "node": "Generate Post Content", "type": "main", "index": 0 }]
+      ]
+    },
+    "Generate Post Content": {
+      "main": [
+        [
+          { "node": "Post to Facebook", "type": "main", "index": 0 },
+          { "node": "Post to Instagram", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Post to Facebook": {
+      "main": [
+        [{ "node": "Notify Success (Slack/Telegram)", "type": "main", "index": 0 }]
+      ]
+    },
+    "Post to Instagram": {
+      "main": [
+        [{ "node": "Notify Success (Slack/Telegram)", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null
+}

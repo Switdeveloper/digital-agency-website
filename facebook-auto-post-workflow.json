@@ -1,0 +1,90 @@
+{
+  "name": "Facebook Auto Post",
+  "nodes": [
+    {
+      "parameters": {
+        "triggerTimes": [
+          {
+            "mode": "everyDay",
+            "hour": 9,
+            "minute": 0
+          }
+        ]
+      },
+      "name": "Cron Trigger",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [
+        250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "message",
+              "value": "Hello from automated n8n workflow! Posted at {{$now}}"
+            },
+            {
+              "name": "link",
+              "value": "https://example.com"
+            }
+          ]
+        }
+      },
+      "name": "Set Post Content",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        450,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "createPost",
+        "pageId": "",
+        "message": "={{ $json[\"message\"] }}",
+        "link": "={{ $json[\"link\"] }}",
+        "accessToken": "={{ $credentials.facebook.accessToken }}"
+      },
+      "name": "Facebook Post",
+      "type": "n8n-nodes-base.facebook",
+      "typeVersion": 1,
+      "position": [
+        650,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Cron Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set Post Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Post Content": {
+      "main": [
+        [
+          {
+            "node": "Facebook Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "id": "facebook-auto-post-1",
+  "tags": []
+}
