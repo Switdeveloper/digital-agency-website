@@ -10,7 +10,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
@@ -18,7 +18,7 @@
             background-color: #f5f5f5;
             padding: 20px;
         }
-        
+
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -27,46 +27,46 @@
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
             overflow: hidden;
         }
-        
+
         header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 30px;
             text-align: center;
         }
-        
+
         header h1 {
             margin-bottom: 10px;
             font-size: 2.2rem;
         }
-        
+
         header p {
             opacity: 0.9;
             font-size: 1.1rem;
         }
-        
+
         .form-section, .results-section {
             padding: 30px;
         }
-        
+
         .form-section h2, .results-section h2 {
             color: #2c3e50;
             margin-bottom: 25px;
             padding-bottom: 10px;
             border-bottom: 2px solid #ecf0f1;
         }
-        
+
         .form-group {
             margin-bottom: 20px;
         }
-        
+
         .form-group label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
             color: #2c3e50;
         }
-        
+
         .form-group input,
         .form-group textarea,
         .form-group select {
@@ -77,25 +77,25 @@
             font-size: 1rem;
             transition: border-color 0.3s;
         }
-        
+
         .form-group input:focus,
         .form-group textarea:focus,
         .form-group select:focus {
             outline: none;
             border-color: #667eea;
         }
-        
+
         .checkbox-group {
             display: flex;
             align-items: center;
             margin-bottom: 15px;
         }
-        
+
         .checkbox-group input {
             width: auto;
             margin-right: 10px;
         }
-        
+
         .btn {
             display: inline-block;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -110,20 +110,20 @@
             width: 100%;
             max-width: 200px;
         }
-        
+
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
-        
+
         .btn:active {
             transform: translateY(0);
         }
-        
+
         .results {
             margin-top: 25px;
         }
-        
+
         .result-item {
             background: #f8f9ff;
             border-left: 4px solid #667eea;
@@ -131,7 +131,7 @@
             margin-bottom: 20px;
             border-radius: 0 8px 8px 0;
         }
-        
+
         .result-item h3 {
             color: #2c3e50;
             margin-bottom: 15px;
@@ -139,23 +139,23 @@
             align-items: center;
             gap: 10px;
         }
-        
+
         .result-item h3::before {
             content: "📍";
             font-size: 1.2rem;
         }
-        
+
         .result-field {
             margin-bottom: 12px;
         }
-        
+
         .result-field label {
             font-weight: 600;
             color: #34495e;
             display: block;
             margin-bottom: 5px;
         }
-        
+
         .result-field value {
             display: block;
             background: white;
@@ -164,23 +164,23 @@
             border: 1px solid #ecf0f1;
             word-break: break-all;
         }
-        
+
         .result-field value a {
             color: #667eea;
             text-decoration: none;
         }
-        
+
         .result-field value a:hover {
             text-decoration: underline;
         }
-        
+
         .loading {
             text-align: center;
             padding: 40px;
             color: #7f8c8d;
             font-style: italic;
         }
-        
+
         .error {
             background: #ffeef0;
             border-left: 4px solid #e74c3c;
@@ -189,7 +189,7 @@
             border-radius: 0 4px 4px 0;
             margin-top: 20px;
         }
-        
+
         .stats {
             display: flex;
             justify-content: space-between;
@@ -198,62 +198,62 @@
             border-radius: 6px;
             margin-top: 20px;
         }
-        
+
         .stat {
             text-align: center;
         }
-        
+
         .stat-value {
             font-size: 1.8rem;
             font-weight: bold;
             color: #2c3e50;
         }
-        
+
         .stat-label {
             font-size: 0.9rem;
             color: #7f8c8d;
             text-transform: uppercase;
         }
-        
+
         @media (max-width: 768px) {
             .container {
                 margin: 10px;
                 border-radius: 0;
             }
-            
+
             header {
                 padding: 20px;
             }
-            
+
             header h1 {
                 font-size: 1.8rem;
             }
-            
+
             .form-section, .results-section {
                 padding: 20px;
             }
-            
+
             .stats {
                 flex-wrap: wrap;
                 gap: 10px;
             }
-            
+
             .stat {
                 flex: 1;
                 min-width: 120px;
             }
         }
-        
+
         @media (max-width: 480px) {
             body {
                 padding: 10px;
             }
-            
+
             .checkbox-group {
                 flex-direction: column;
                 align-items: flex-start;
             }
-            
+
             .checkbox-group label {
                 margin-top: 10px;
             }
@@ -266,25 +266,38 @@
             <h1>🍽️ Restaurant Lead Scraper</h1>
             <p>Generate targeted restaurant leads for New York, USA</p>
         </header>
-        
+
         <div class="form-section">
             <h2>Scraping Configuration</h2>
             <form id="scraperForm">
                 <div class="form-group">
-                    <label for="locationQuery">Location Query:</label>
-                    <input type="text" id="locationQuery" value="New York, USA" required>
+                    <label for="includeWebResults">Include Web Results:</label>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="includeWebResults">
+                        <label for="includeWebResults">Include web search results</label>
+                    </div>
                 </div>
-                
+
                 <div class="form-group">
-                    <label for="searchStringsArray">Search Terms (comma-separated):</label>
-                    <input type="text" id="searchStringsArray" value="restaurant" required>
+                    <label for="language">Language:</label>
+                    <input type="text" id="language" value="en" placeholder="en">
                 </div>
-                
+
+                <div class="form-group">
+                    <label for="locationQuery">Location Query:</label>
+                    <input type="text" id="locationQuery" value="New York, USA" placeholder="New York, USA">
+                </div>
+
                 <div class="form-group">
                     <label for="maxCrawledPlacesPerSearch">Max Places Per Search:</label>
-                    <input type="number" id="maxCrawledPlacesPerSearch" value="10" min="1" max="50">
+                    <input type="number" id="maxCrawledPlacesPerSearch" value="10" min="1" max="100">
                 </div>
-                
+
+                <div class="form-group">
+                    <label for="maximumLeadsEnrichmentRecords">Max Leads Enrichment Records:</label>
+                    <input type="number" id="maximumLeadsEnrichmentRecords" value="0" min="0" max="1000">
+                </div>
+
                 <div class="form-group">
                     <label for="scrapeContacts">Scrape Contacts:</label>
                     <div class="checkbox-group">
@@ -292,48 +305,83 @@
                         <label for="scrapeContacts">Enable contact information scraping</label>
                     </div>
                 </div>
-                
+
+                <div class="form-group">
+                    <label for="scrapeDirectories">Scrape Directories:</label>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="scrapeDirectories">
+                        <label for="scrapeDirectories">Scrape directory listings</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="scrapePlaceDetailPage">Scrape Place Detail Page:</label>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="scrapePlaceDetailPage">
+                        <label for="scrapePlaceDetailPage">Scrape individual place detail pages</label>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <label>Social Media Profiles to Scrape:</label>
                     <div class="checkbox-group">
-                        <input type="checkbox" id="scrapeFacebook" disabled>
+                        <input type="checkbox" id="scrapeFacebook">
                         <label for="scrapeFacebook">Facebook</label>
                     </div>
                     <div class="checkbox-group">
-                        <input type="checkbox" id="scrapeInstagram" disabled>
+                        <input type="checkbox" id="scrapeInstagram">
                         <label for="scrapeInstagram">Instagram</label>
                     </div>
                     <div class="checkbox-group">
-                        <input type="checkbox" id="scrapeTwitter" disabled>
+                        <input type="checkbox" id="scrapeTwitter">
                         <label for="scrapeTwitter">Twitter/X</label>
                     </div>
                     <div class="checkbox-group">
-                        <input type="checkbox" id="scrapeTikTok" disabled>
+                        <input type="checkbox" id="scrapeTikTok">
                         <label for="scrapeTikTok">TikTok</label>
                     </div>
                     <div class="checkbox-group">
-                        <input type="checkbox" id="scrapeYouTube" disabled>
+                        <input type="checkbox" id="scrapeYouTube">
                         <label for="scrapeYouTube">YouTube</label>
                     </div>
-                    <small class="form-text" style="display: block; margin-top: 10px; color: #7f8c8d;">
-                        Social media scraping disabled per configuration (can be enabled in code if needed)
-                    </small>
                 </div>
-                
+
+                <div class="form-group">
+                    <label for="scrapeTableReservationProvider">Scrape Table Reservation Provider:</label>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="scrapeTableReservationProvider">
+                        <label for="scrapeTableReservationProvider">Scrape table reservation providers</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="searchStringsArray">Search Terms (comma-separated):</label>
+                    <textarea id="searchStringsArray" rows="3" placeholder="restaurant, cafe, diner">restaurant</textarea>
+                    <small class="form-text">Enter one or more search terms separated by commas</small>
+                </div>
+
                 <div class="form-group">
                     <label for="skipClosedPlaces">Skip Closed Places:</label>
                     <div class="checkbox-group">
-                        <input type="checkbox" id="skipClosedPlaces">
+                        <input type="checkbox" id="skipClosedPlaces" checked>
                         <label for="skipClosedPlaces">Exclude permanently closed businesses</label>
                     </div>
                 </div>
-                
+
+                <div class="form-group">
+                    <label for="verifyLeadsEnrichmentEmails">Verify Leads Enrichment Emails:</label>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="verifyLeadsEnrichmentEmails">
+                        <label for="verifyLeadsEnrichmentEmails">Verify email addresses found</label>
+                    </div>
+                </div>
+
                 <button type="submit" class="btn" id="submitBtn">
                     🔍 Start Scraping
                 </button>
             </form>
         </div>
-        
+
         <div class="results-section" style="display: none;" id="resultsSection">
             <h2>Scraping Results</h2>
             <div class="stats" id="statsContainer">
@@ -350,17 +398,17 @@
                     <div class="stat-label">Successful</div>
                 </div>
             </div>
-            
+
             <div id="resultsContainer" class="results"></div>
         </div>
-        
+
         <div class="loading" id="loadingSection" style="display: none;">
             <div>🔄 Scraping in progress...</div>
             <div style="margin-top: 10px; font-size: 0.9rem;">
                 This may take a moment depending on the number of results
             </div>
         </div>
-        
+
         <div id="errorSection" style="display: none;"></div>
     </div>
 
@@ -376,15 +424,15 @@
             const totalResultsEl = document.getElementById('totalResults');
             const processedCountEl = document.getElementById('processedCount');
             const successCountEl = document.getElementById('successCount');
-            
+
             // Webhook URL from user's request
             const WEBHOOK_URL = "https://n8n-pzynllvf.us-west-1.clawcloudrun.com/webhook/0cc84002-2adb-46de-9f7d-223efc6bba47";
-            
+
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
                 startScraping();
             });
-            
+
             function startScraping() {
                 // Reset UI
                 resultsSection.style.display = 'none';
@@ -392,21 +440,21 @@
                 errorSection.style.display = 'none';
                 errorSection.innerHTML = '';
                 resultsContainer.innerHTML = '';
-                
+
                 // Disable button during processing
                 submitBtn.disabled = true;
                 submitBtn.textContent = '🔄 Scraping...';
-                
+
                 // Gather form data into the specified JSON format
                 const scrapeConfig = {
-                    includeWebResults: false,
-                    language: "en",
+                    includeWebResults: document.getElementById('includeWebResults').checked,
+                    language: document.getElementById('language').value || "en",
                     locationQuery: document.getElementById('locationQuery').value.trim(),
                     maxCrawledPlacesPerSearch: parseInt(document.getElementById('maxCrawledPlacesPerSearch').value),
-                    maximumLeadsEnrichmentRecords: 0,
+                    maximumLeadsEnrichmentRecords: parseInt(document.getElementById('maximumLeadsEnrichmentRecords').value),
                     scrapeContacts: document.getElementById('scrapeContacts').checked,
-                    scrapeDirectories: false,
-                    scrapePlaceDetailPage: false,
+                    scrapeDirectories: document.getElementById('scrapeDirectories').checked,
+                    scrapePlaceDetailPage: document.getElementById('scrapePlaceDetailPage').checked,
                     scrapeSocialMediaProfiles: {
                         facebooks: document.getElementById('scrapeFacebook').checked,
                         instagrams: document.getElementById('scrapeInstagram').checked,
@@ -414,15 +462,15 @@
                         twitters: document.getElementById('scrapeTwitter').checked,
                         youtubes: document.getElementById('scrapeYouTube').checked
                     },
-                    scrapeTableReservationProvider: false,
+                    scrapeTableReservationProvider: document.getElementById('scrapeTableReservationProvider').checked,
                     searchStringsArray: document.getElementById('searchStringsArray').value
                         .split(',')
                         .map(term => term.trim())
                         .filter(term => term.length > 0),
                     skipClosedPlaces: document.getElementById('skipClosedPlaces').checked,
-                    verifyLeadsEnrichmentEmails: false
+                    verifyLeadsEnrichmentEmails: document.getElementById('verifyLeadsEnrichmentEmails').checked
                 };
-                
+
                 // Send to n8n webhook
                 fetch(WEBHOOK_URL, {
                     method: 'POST',
@@ -450,11 +498,11 @@
                     loadingSection.style.display = 'none';
                 });
             }
-            
+
             function displayResults(data) {
                 // Handle different possible response formats
                 let resultsArray = [];
-                
+
                 if (Array.isArray(data)) {
                     resultsArray = data;
                 } else if (data && Array.isArray(data.results)) {
@@ -465,26 +513,26 @@
                     // Single result object
                     resultsArray = [data];
                 }
-                
+
                 // Update stats
                 totalResultsEl.textContent = resultsArray.length;
                 processedCountEl.textContent = resultsArray.length;
                 successCountEl.textContent = resultsArray.length; // Assuming all returned are successful
-                
+
                 // Show results section
                 resultsSection.style.display = 'block';
                 statsContainer.style.display = 'flex';
-                
+
                 // Display each result
                 if (resultsArray.length === 0) {
                     resultsContainer.innerHTML = '<p style="text-align: center; color: #7f8c8d; font-style: italic;">No results found. Try adjusting your search parameters.</p>';
                     return;
                 }
-                
+
                 resultsArray.forEach((result, index) => {
                     const resultElement = document.createElement('div');
                     resultElement.className = 'result-item';
-                    
+
                     // Format the result according to user's expected output format
                     resultElement.innerHTML = `
                         <h3>${result.name || `Restaurant #${index + 1}`}</h3>
@@ -526,11 +574,11 @@
                             </div>
                         ` : ''}
                     `;
-                    
+
                     resultsContainer.appendChild(resultElement);
                 });
             }
-            
+
             function showError(message) {
                 errorSection.innerHTML = `<div class="error">❌ ${message}</div>`;
                 errorSection.style.display = 'block';
