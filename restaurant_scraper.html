@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Lead Scraper</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        header h1 {
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+        }
+        
+        header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .form-section, .results-section {
+            padding: 30px;
+        }
+        
+        .form-section h2, .results-section h2 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ecf0f1;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .checkbox-group input {
+            width: auto;
+            margin-right: 10px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+            max-width: 200px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .results {
+            margin-top: 25px;
+        }
+        
+        .result-item {
+            background: #f8f9ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .result-item h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .result-item h3::before {
+            content: "📍";
+            font-size: 1.2rem;
+        }
+        
+        .result-field {
+            margin-bottom: 12px;
+        }
+        
+        .result-field label {
+            font-weight: 600;
+            color: #34495e;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .result-field value {
+            display: block;
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ecf0f1;
+            word-break: break-all;
+        }
+        
+        .result-field value a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        .result-field value a:hover {
+            text-decoration: underline;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .error {
+            background: #ffeef0;
+            border-left: 4px solid #e74c3c;
+            color: #c0392b;
+            padding: 15px;
+            border-radius: 0 4px 4px 0;
+            margin-top: 20px;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            text-transform: uppercase;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 0;
+            }
+            
+            header {
+                padding: 20px;
+            }
+            
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .form-section, .results-section {
+                padding: 20px;
+            }
+            
+            .stats {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .stat {
+                flex: 1;
+                min-width: 120px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .checkbox-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .checkbox-group label {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🍽️ Restaurant Lead Scraper</h1>
+            <p>Generate targeted restaurant leads for New York, USA</p>
+        </header>
+        
+        <div class="form-section">
+            <h2>Scraping Configuration</h2>
+            <form id="scraperForm">
+                <div class="form-group">
+                    <label for="locationQuery">Location Query:</label>
+                    <input type="text" id="locationQuery" value="New York, USA" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="searchStringsArray">Search Terms (comma-separated):</label>
+                    <input type="text" id="searchStringsArray" value="restaurant" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="maxCrawledPlacesPerSearch">Max Places Per Search:</label>
+                    <input type="number" id="maxCrawledPlacesPerSearch" value="10" min="1" max="50">
+                </div>
+                
+                <div class="form-group">
+                    <label for="scrapeContacts">Scrape Contacts:</label>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="scrapeContacts" checked>
+                        <label for="scrapeContacts">Enable contact information scraping</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Social Media Profiles to Scrape:</label>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="scrapeFacebook" disabled>
+                        <label for="scrapeFacebook">Facebook</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="scrapeInstagram" disabled>
+                        <label for="scrapeInstagram">Instagram</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="scrapeTwitter" disabled>
+                        <label for="scrapeTwitter">Twitter/X</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="scrapeTikTok" disabled>
+                        <label for="scrapeTikTok">TikTok</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="scrapeYouTube" disabled>
+                        <label for="scrapeYouTube">YouTube</label>
+                    </div>
+                    <small class="form-text" style="display: block; margin-top: 10px; color: #7f8c8d;">
+                        Social media scraping disabled per configuration (can be enabled in code if needed)
+                    </small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="skipClosedPlaces">Skip Closed Places:</label>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="skipClosedPlaces">
+                        <label for="skipClosedPlaces">Exclude permanently closed businesses</label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn" id="submitBtn">
+                    🔍 Start Scraping
+                </button>
+            </form>
+        </div>
+        
+        <div class="results-section" style="display: none;" id="resultsSection">
+            <h2>Scraping Results</h2>
+            <div class="stats" id="statsContainer">
+                <div class="stat">
+                    <div class="stat-value" id="totalResults">0</div>
+                    <div class="stat-label">Total Results</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="processedCount">0</div>
+                    <div class="stat-label">Processed</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="successCount">0</div>
+                    <div class="stat-label">Successful</div>
+                </div>
+            </div>
+            
+            <div id="resultsContainer" class="results"></div>
+        </div>
+        
+        <div class="loading" id="loadingSection" style="display: none;">
+            <div>🔄 Scraping in progress...</div>
+            <div style="margin-top: 10px; font-size: 0.9rem;">
+                This may take a moment depending on the number of results
+            </div>
+        </div>
+        
+        <div id="errorSection" style="display: none;"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('scraperForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const resultsSection = document.getElementById('resultsSection');
+            const loadingSection = document.getElementById('loadingSection');
+            const errorSection = document.getElementById('errorSection');
+            const resultsContainer = document.getElementById('resultsContainer');
+            const statsContainer = document.getElementById('statsContainer');
+            const totalResultsEl = document.getElementById('totalResults');
+            const processedCountEl = document.getElementById('processedCount');
+            const successCountEl = document.getElementById('successCount');
+            
+            // Webhook URL from user's request
+            const WEBHOOK_URL = "https://n8n-pzynllvf.us-west-1.clawcloudrun.com/webhook-test/0cc84002-2adb-46de-9f7d-223efc6bba47";
+            
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                startScraping();
+            });
+            
+            function startScraping() {
+                // Reset UI
+                resultsSection.style.display = 'none';
+                loadingSection.style.display = 'block';
+                errorSection.style.display = 'none';
+                errorSection.innerHTML = '';
+                resultsContainer.innerHTML = '';
+                
+                // Disable button during processing
+                submitBtn.disabled = true;
+                submitBtn.textContent = '🔄 Scraping...';
+                
+                // Gather form data into the specified JSON format
+                const scrapeConfig = {
+                    includeWebResults: false,
+                    language: "en",
+                    locationQuery: document.getElementById('locationQuery').value.trim(),
+                    maxCrawledPlacesPerSearch: parseInt(document.getElementById('maxCrawledPlacesPerSearch').value),
+                    maximumLeadsEnrichmentRecords: 0,
+                    scrapeContacts: document.getElementById('scrapeContacts').checked,
+                    scrapeDirectories: false,
+                    scrapePlaceDetailPage: false,
+                    scrapeSocialMediaProfiles: {
+                        facebooks: document.getElementById('scrapeFacebook').checked,
+                        instagrams: document.getElementById('scrapeInstagram').checked,
+                        tiktoks: document.getElementById('scrapeTikTok').checked,
+                        twitters: document.getElementById('scrapeTwitter').checked,
+                        youtubes: document.getElementById('scrapeYouTube').checked
+                    },
+                    scrapeTableReservationProvider: false,
+                    searchStringsArray: document.getElementById('searchStringsArray').value
+                        .split(',')
+                        .map(term => term.trim())
+                        .filter(term => term.length > 0),
+                    skipClosedPlaces: document.getElementById('skipClosedPlaces').checked,
+                    verifyLeadsEnrichmentEmails: false
+                };
+                
+                // Send to n8n webhook
+                fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(scrapeConfig)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    displayResults(data);
+                })
+                .catch(error => {
+                    showError(`Failed to scrape: ${error.message}`);
+                })
+                .finally(() => {
+                    // Re-enable button
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = '🔍 Start Scraping';
+                    loadingSection.style.display = 'none';
+                });
+            }
+            
+            function displayResults(data) {
+                // Handle different possible response formats
+                let resultsArray = [];
+                
+                if (Array.isArray(data)) {
+                    resultsArray = data;
+                } else if (data && Array.isArray(data.results)) {
+                    resultsArray = data.results;
+                } else if (data && Array.isArray(data.data)) {
+                    resultsArray = data.data;
+                } else if (data && typeof data === 'object') {
+                    // Single result object
+                    resultsArray = [data];
+                }
+                
+                // Update stats
+                totalResultsEl.textContent = resultsArray.length;
+                processedCountEl.textContent = resultsArray.length;
+                successCountEl.textContent = resultsArray.length; // Assuming all returned are successful
+                
+                // Show results section
+                resultsSection.style.display = 'block';
+                statsContainer.style.display = 'flex';
+                
+                // Display each result
+                if (resultsArray.length === 0) {
+                    resultsContainer.innerHTML = '<p style="text-align: center; color: #7f8c8d; font-style: italic;">No results found. Try adjusting your search parameters.</p>';
+                    return;
+                }
+                
+                resultsArray.forEach((result, index) => {
+                    const resultElement = document.createElement('div');
+                    resultElement.className = 'result-item';
+                    
+                    // Format the result according to user's expected output format
+                    resultElement.innerHTML = `
+                        <h3>${result.name || `Restaurant #${index + 1}`}</h3>
+                        ${result.phone ? `<div class="result-field"><label>Phone:</label><value>${result.phone}</value></div>` : ''}
+                        ${result.searchTerm ? `<div class="result-field"><label>Search Term:</label><value>${result.searchTerm}</value></div>` : ''}
+                        ${result['google map'] ? `<div class="result-field"><label>Google Map:</label><value><a href="${result['google map']}" target="_blank">View on Google Maps</a></value></div>` : ''}
+                        ${result.address ? `<div class="result-field"><label>Address:</label><value>${result.address}</value></div>` : ''}
+                        ${result.reviewCount !== undefined ? `<div class="result-field"><label>Review Count:</label><value>${result.reviewCount}</value></div>` : ''}
+                        ${result.email && Array.isArray(result.email) && result.email.length > 0 ? `
+                            <div class="result-field">
+                                <label>Email Addresses:</label>
+                                <value>
+                                    ${result.email.map(email => `<a href="mailto:${email}" target="_blank">${email}</a>`).join('<br>')}
+                                </value>
+                            </div>
+                        ` : ''}
+                        ${result.twitters && Array.isArray(result.twitters) && result.twitters.length > 0 ? `
+                            <div class="result-field">
+                                <label>Twitter/X:</label>
+                                <value>
+                                    ${result.twitters.map(url => `<a href="${url}" target="_blank">${url}</a>`).join('<br>')}
+                                </value>
+                            </div>
+                        ` : ''}
+                        ${result.instagrams && Array.isArray(result.instagrams) && result.instagrams.length > 0 ? `
+                            <div class="result-field">
+                                <label>Instagram:</label>
+                                <value>
+                                    ${result.instagrams.map(url => `<a href="${url}" target="_blank">${url}</a>`).join('<br>')}
+                                </value>
+                            </div>
+                        ` : ''}
+                        ${result.facebooks && Array.isArray(result.facebooks) && result.facebooks.length > 0 ? `
+                            <div class="result-field">
+                                <label>Facebook:</label>
+                                <value>
+                                    ${result.facebooks.map(url => `<a href="${url}" target="_blank">${url}</a>`).join('<br>')}
+                                </value>
+                            </div>
+                        ` : ''}
+                    `;
+                    
+                    resultsContainer.appendChild(resultElement);
+                });
+            }
+            
+            function showError(message) {
+                errorSection.innerHTML = `<div class="error">❌ ${message}</div>`;
+                errorSection.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
